@@ -39,12 +39,12 @@ html {
 
 /* Transisi elemen */
 section {
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 1s ease-in-out;
 }
 
 /* Animasi tombol buka undangan */
 #openInvitation {
-    transition: all 0.8s ease;
+    transition: all 1.6s ease;
 }
 
 /* Mencegah interaksi dengan konten sebelum dibuka */
@@ -386,10 +386,10 @@ Kirim Ucapan
 AOS.init({
     once: false,
     mirror: true,
-    duration: 1800,
+    duration: 1000,
     easing: 'ease-in-out',
-    offset: 100,
-    delay: 100,
+    offset: 80,
+    delay: 60,
     anchorPlacement: 'top-bottom'
 });
 
@@ -473,9 +473,9 @@ AOS.init({
         // Refresh AOS agar animasi berjalan dengan benar
         setTimeout(() => {
             AOS.refreshHard();
-        }, 500);
+        }, 800);
 
-    }, 800);
+    }, 1100);
         }
 
         musicToggle.addEventListener("click", () => {
