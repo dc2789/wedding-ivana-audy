@@ -39,12 +39,12 @@ html {
 
 /* Transisi elemen */
 section {
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1.5s ease-in-out;
 }
 
 /* Animasi tombol buka undangan */
 #openInvitation {
-    transition: all 2s ease;
+    transition: all 1.3s ease;
 }
 
 /* Mencegah interaksi dengan konten sebelum dibuka */
@@ -106,7 +106,7 @@ body.invitation-locked #main-content ~ footer {
 
     <!-- Background Audio (Free Wedding Instrumental Theme) -->
     <audio id="weddingMusic" loop>
-        <source src="Brian_McKnight_-_Marry_Your_Daughter_(mp3.pm).mp3" type="audio/mp3">
+        <source src="Brian McKnight - Marry your daughter lyrics.mp3" type="audio/mp3">
     </audio>
 
     <!-- SECTION 1: Landing Page / Hero Cover -->
@@ -403,10 +403,10 @@ Kirim Ucapan
 AOS.init({
     once: false,
     mirror: true,
-    duration: 1000,
+    duration: 1500,
     easing: 'ease-in-out',
-    offset: 50,
-    delay: 30,
+    offset: 100,
+    delay: 80,
     anchorPlacement: 'top-bottom'
 });
 
@@ -492,7 +492,7 @@ AOS.init({
             AOS.refreshHard();
         }, 800);
 
-    }, 2500);
+    }, 4000);
         }
 
         musicToggle.addEventListener("click", () => {
@@ -524,10 +524,7 @@ AOS.init({
             {"id": 4, "item": "Coffee Maker Machine Espresso", "claimed": true, "by": "Rekan Kerja Arthur"}
         ];
 
-        const defaultComments = [
-            {"name": "Bimo & Shinta", "relation": "Teman", "text": "Selamat menempuh hidup baru Arthur dan Eleanor! Semoga cinta kalian abadi selamanya sampai kakek nenek."},
-            {"name": "Tante Miranda", "relation": "Keluarga", "text": "Selamat ya kado terindah tahun ini, lancar sampai hari H pemberkatan Tuhan Yesus memberkati."}
-        ];
+        const defaultComments = [];
 
         const defaultRSVP = [];
 
