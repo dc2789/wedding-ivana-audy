@@ -402,7 +402,17 @@ Kirim Ucapan
         <p class="font-premium-serif text-lg font-semibold text-[#C2B280] tracking-widest">Audy & Ivanna</p>
         <p class="text-xs text-[#C2B280]/40 mt-2">© 2026 DC.orp. All Rights Reserved.</p>
     </footer>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const namaTamu = urlParams.get('to');
 
+    if (namaTamu) {
+      document.getElementById('nama-tamu').textContent = namaTamu;
+    }
+  });
+</script>
+    
     <!-- INTERACTIVE SCRIPT & LOCAL JSON ENGINE -->
     <script>
 // Init AOS Animations
