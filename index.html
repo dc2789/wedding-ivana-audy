@@ -415,13 +415,6 @@ Kirim Ucapan
     
     <!-- INTERACTIVE SCRIPT & LOCAL JSON ENGINE -->
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const namaTamu = urlParams.get('to');
-    
-        if (namaTamu) {
-          document.getElementById('nama-tamu').textContent = namaTamu;
-        }
           
         // Init AOS Animations
         AOS.init({
@@ -733,8 +726,15 @@ Kirim Ucapan
             
             renderComments(); // Muat ucapan dari Supabase saat halaman dibuka
         });
-          
-      });
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const namaTamu = urlParams.get('to');
+        
+            if (namaTamu) {
+              document.getElementById('nama-tamu').textContent = namaTamu;
+            }
+        });
     </script>
 </body>
 </html>
