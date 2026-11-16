@@ -540,12 +540,12 @@ Kirim Ucapan
         
         // --- LOCAL JSON DATABASE ENGINE ---
         // Mock Initial JSON Data Seed
-        const defaultWishlist = [
-            {"id": 1, "item": "Set Alat Masak Granite Premium", "claimed": true, "by": "Keluarga Eleanor"},
-            {"id": 2, "item": "Smart TV 50 Inch 4K Ultra HD", "claimed": false, "by": ""},
-            {"id": 3, "item": "Robot Vacuum Cleaner", "claimed": false, "by": ""},
-            {"id": 4, "item": "Coffee Maker Machine Espresso", "claimed": true, "by": "Rekan Kerja Arthur"}
-        ];
+        // const defaultWishlist = [
+        //     {"id": 1, "item": "Set Alat Masak Granite Premium", "claimed": true, "by": "Keluarga Eleanor"},
+        //     {"id": 2, "item": "Smart TV 50 Inch 4K Ultra HD", "claimed": false, "by": ""},
+        //     {"id": 3, "item": "Robot Vacuum Cleaner", "claimed": false, "by": ""},
+        //     {"id": 4, "item": "Coffee Maker Machine Espresso", "claimed": true, "by": "Rekan Kerja Arthur"}
+        // ];
 
         const defaultComments = [];
         const defaultRSVP = [];
@@ -561,24 +561,24 @@ Kirim Ucapan
         }
 
         // Render Functions
-        function renderWishlist() {
-            const items = getDB('wedding_wishlist', defaultWishlist);
-            const container = document.getElementById('wishlist-container');
-            container.innerHTML = '';
-            items.forEach(i => {
-                container.innerHTML += `
-                    <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 flex justify-between items-center text-xs">
-                        <div>
-                            <p class="font-medium text-[#E6DCC4]">${i.item}</p>
-                            ${i.claimed ? `<p class="text-[10px] text-[#C2B280]/60 italic">Dihadiahkan oleh: ${i.by}</p>` : ''}
-                        </div>
-                        <button onclick="claimWish(${i.id})" ${i.claimed ? 'disabled' : ''} class="px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${i.claimed ? 'bg-zinc-700 text-zinc-400 cursor-not-allowed' : 'bg-[#C2B280] text-[#1A1610] hover:bg-[#E6DCC4]'}" >
-                            ${i.claimed ? 'Claimed' : 'Klaim'}
-                        </button>
-                    </div>
-                `;
-            });
-        }
+        // function renderWishlist() {
+        //     const items = getDB('wedding_wishlist', defaultWishlist);
+        //     const container = document.getElementById('wishlist-container');
+        //     container.innerHTML = '';
+        //     items.forEach(i => {
+        //         container.innerHTML += `
+        //             <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 flex justify-between items-center text-xs">
+        //                 <div>
+        //                     <p class="font-medium text-[#E6DCC4]">${i.item}</p>
+        //                     ${i.claimed ? `<p class="text-[10px] text-[#C2B280]/60 italic">Dihadiahkan oleh: ${i.by}</p>` : ''}
+        //                 </div>
+        //                 <button onclick="claimWish(${i.id})" ${i.claimed ? 'disabled' : ''} class="px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${i.claimed ? 'bg-zinc-700 text-zinc-400 cursor-not-allowed' : 'bg-[#C2B280] text-[#1A1610] hover:bg-[#E6DCC4]'}" >
+        //                     ${i.claimed ? 'Claimed' : 'Klaim'}
+        //                 </button>
+        //             </div>
+        //         `;
+        //     });
+        // }
 
         // --- 1. MENGAMBIL & MERENDER UCAPAN DARI SUPABASE ---
         async function renderComments() {
@@ -628,14 +628,14 @@ Kirim Ucapan
         }
         
         // Actions
-        function claimWish(id) {
-            const name = prompt("Masukkan nama Anda untuk mengklaim kado ini:");
-            if (!name) return;
-            let items = getDB('wedding_wishlist', defaultWishlist);
-            items = items.map(i => i.id === id ? {...i, claimed: true, by: name} : i);
-            saveDB('wedding_wishlist', items);
-            renderWishlist();
-        }
+        // function claimWish(id) {
+        //     const name = prompt("Masukkan nama Anda untuk mengklaim kado ini:");
+        //     if (!name) return;
+        //     let items = getDB('wedding_wishlist', defaultWishlist);
+        //     items = items.map(i => i.id === id ? {...i, claimed: true, by: name} : i);
+        //     saveDB('wedding_wishlist', items);
+        //     renderWishlist();
+        // }
 
         // Form Submit Listeners
         document.getElementById('commentForm').addEventListener('submit', (e) => {
@@ -718,12 +718,12 @@ Kirim Ucapan
         
         // --- INITIAL ENGINE LOAD ---
         window.addEventListener('DOMContentLoaded', () => {
-            if (typeof defaultWishlist !== 'undefined' && !localStorage.getItem('wedding_wishlist')) {
-                saveDB('wedding_wishlist', defaultWishlist);
-            }
-            if (typeof renderWishlist === 'function') {
-                renderWishlist();
-            }
+            // if (typeof defaultWishlist !== 'undefined' && !localStorage.getItem('wedding_wishlist')) {
+            //     saveDB('wedding_wishlist', defaultWishlist);
+            // }
+            // if (typeof renderWishlist === 'function') {
+            //     renderWishlist();
+            // }
             
             renderComments(); // Muat ucapan dari Supabase saat halaman dibuka
         });
