@@ -637,23 +637,7 @@ Kirim Ucapan
         //     renderWishlist();
         // }
 
-        // Form Submit Listeners
-        document.getElementById('commentForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('commentName').value;
-            const relation = document.getElementById('commentRelation').value;
-            const text = document.getElementById('commentText').value;
-        
-            const comments = getDB('wedding_comments', defaultComments);
-            console.log({name, relation, text});
-            comments.push({name, relation, text});
-            saveDB('wedding_comments', comments);
-        
-            renderComments();
-            document.getElementById('commentForm').reset();
-        });
-
-        // --- 2. MENGIRIM DATA RSVP KE SUPABASE ---
+        // --- MENGIRIM DATA RSVP KE SUPABASE ---
         document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -700,6 +684,8 @@ Kirim Ucapan
             const relation = document.getElementById('commentRelation').value;
             const text = document.getElementById('commentText').value.trim();
         
+            comments.push({name, relation, text});
+            
             const { error } = await supabaseClient
                 .from('wedding_comments')
                 .insert([{ name, relation, text }]);
