@@ -539,7 +539,13 @@ Kirim Ucapan
         // Ambil URL & Anon Key dari Dashboard Supabase -> Project Settings -> API
         const SUPABASE_URL = 'https://wwkcjmdzzmxlwsrpvika.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_u851bwQm29hEwGQr3dvZwg_osyNEO-l';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let supabaseClient = null;
+        
+        if (typeof window.supabase !== 'undefined') {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } else {
+            console.error('File supabase.js lokal belum terbaca! Pastikan file supabase.js ada di folder yang sama dengan index.html.');
+        }
         
         // --- LOCAL JSON DATABASE ENGINE ---
         // Mock Initial JSON Data Seed
