@@ -645,6 +645,7 @@ Kirim Ucapan
             const text = document.getElementById('commentText').value;
         
             const comments = getDB('wedding_comments', defaultComments);
+            console.log({name, relation, text});
             comments.push({name, relation, text});
             saveDB('wedding_comments', comments);
         
