@@ -540,13 +540,7 @@ Kirim Ucapan
         
         // --- LOCAL JSON DATABASE ENGINE ---
         // Mock Initial JSON Data Seed
-        // const defaultWishlist = [
-        //     {"id": 1, "item": "Set Alat Masak Granite Premium", "claimed": true, "by": "Keluarga Eleanor"},
-        //     {"id": 2, "item": "Smart TV 50 Inch 4K Ultra HD", "claimed": false, "by": ""},
-        //     {"id": 3, "item": "Robot Vacuum Cleaner", "claimed": false, "by": ""},
-        //     {"id": 4, "item": "Coffee Maker Machine Espresso", "claimed": true, "by": "Rekan Kerja Arthur"}
-        // ];
-
+        const defaultWishlist = [];
         const defaultComments = [];
         const defaultRSVP = [];
 
@@ -580,7 +574,7 @@ Kirim Ucapan
         //     });
         // }
 
-        // --- 1. MENGAMBIL & MERENDER UCAPAN DARI SUPABASE ---
+        // --- MENGAMBIL & MERENDER UCAPAN DARI SUPABASE ---
         async function renderComments() {
             const container = document.getElementById('comments-container');
             container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Memuat ucapan...</p>';
@@ -671,34 +665,49 @@ Kirim Ucapan
             }
         });
         
-        // --- KIRIM FORM UCAPAN (COMMENTS) KE SUPABASE ---
-        document.getElementById('commentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Pastikan ID form dan input sesuai dengan HTML Anda
+        const commentForm = document.getElementById('comment-form');
         
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerText;
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mencegah halaman refresh
+        
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            
+            // Ubah status tombol agar user tahu proses sedang berjalan
             submitBtn.disabled = true;
             submitBtn.innerText = 'Mengirim...';
         
-            const name = document.getElementById('commentName').value.trim();
-            const relation = document.getElementById('commentRelation').value;
-            const text = document.getElementById('commentText').value.trim();
+            // Ambil nilai dari input HTML
+            const nameInput = document.getElementById('input-name').value.trim();
+            const relationInput = document.getElementById('input-relation').value.trim();
+            const textInput = document.getElementById('input-text').value.trim();
         
-            comments.push({name, relation, text});
-            
-            const { error } = await supabaseClient
-                .from('wedding_comments')
-                .insert([{ name, relation, text }]);
+            try {
+                // Proses kirim data ke Supabase
+                const { error } = await supabaseClient
+                    .from('wedding_comments')
+                    .insert([
+                        { 
+                            name: nameInput, 
+                            relation: relationInput, 
+                            text: textInput 
+                        }
+                    ]);
         
-            submitBtn.disabled = false;
-            submitBtn.innerText = originalText;
+                if (error) throw error;
         
-            if (error) {
+                // Jika berhasil: reset form dan muat ulang daftar ucapan
+                commentForm.reset();
+                await renderComments();
+        
+            } catch (error) {
                 console.error('Gagal mengirim ucapan:', error.message);
-                alert('Maaf, gagal mengirim ucapan: ' + error.message);
-            } else {
-                document.getElementById('commentForm').reset();
-                await renderComments(); // Langsung muat ulang daftar ucapan terbaru dari Supabase
+                alert('Gagal mengirim ucapan: ' + error.message);
+            } finally {
+                // Kembalikan tombol ke keadaan semula (agar tidak stuck)
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
             }
         });
         
