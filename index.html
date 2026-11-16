@@ -23,8 +23,8 @@
     <!-- AOS (Animate On Scroll) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Tag meta & CSS Anda lainnya -->
-    <script src="https://jsdelivr.net"></script>
+    
+    <script src="https://unpkg.com"></script>
     <style>
         :root {
     --dark-champagne: #C2B280;
@@ -477,13 +477,6 @@ Kirim Ucapan
         const musicToggle = document.getElementById("musicToggle");
         const musicIcon = document.getElementById("musicIcon");
 
-        /** function startInvitation() {
-            document.getElementById("main-content").scrollIntoView({ behavior: 'smooth' });
-            music.play().then(() => {
-                musicToggle.classList.add("music-rotate");
-            }).catch(e => console.log("Autoplay blocked until user interaction."));
-        } **/
-
         function startInvitation() {
             const button = document.getElementById("openInvitation");
             
@@ -590,23 +583,6 @@ Kirim Ucapan
             });
         }
 
-        // function renderComments() {
-        //     const comments = getDB('wedding_comments', defaultComments);
-        //     const container = document.getElementById('comments-container');
-        //     container.innerHTML = '';
-        //     comments.slice().reverse().forEach(c => {
-        //         container.innerHTML += `
-        //             <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 text-xs">
-        //                 <div class="flex justify-between items-center mb-1">
-        //                     <span class="font-bold text-[#E6DCC4]">${c.name}</span>
-        //                     <span class="text-[10px] px-2 py-0.5 rounded bg-[#C2B280]/10 text-[#C2B280] font-medium">${c.relation}</span>
-        //                 </div>
-        //                 <p class="text-[#E6DCC4]/80 leading-relaxed">${c.text}</p>
-        //             </div>
-        //         `;
-        //     });
-        // }
-
         // --- 1. MENGAMBIL & MERENDER UCAPAN DARI SUPABASE ---
         async function renderComments() {
             const container = document.getElementById('comments-container');
@@ -679,20 +655,6 @@ Kirim Ucapan
             document.getElementById('commentForm').reset();
         });
 
-        // document.getElementById('rsvpForm').addEventListener('submit', (e) => {
-        //     e.preventDefault();
-        //     const name = document.getElementById('rsvpName').value;
-        //     const count = document.getElementById('rsvpCount').value;
-        //     const status = document.querySelector('input[name="rsvpStatus"]:checked').value;
-            
-        //     const rsvpList = getDB('wedding_rsvp', defaultRSVP);
-        //     rsvpList.push({name, count, status, timestamp: new Date().toISOString()});
-        //     saveDB('wedding_rsvp', rsvpList);
-    
-        //     alert(`Terima kasih ${name}, data reservasi Anda (${status}) telah berhasil kami simpan.`);
-        //     document.getElementById('rsvpForm').reset();
-        // });
-
         // --- 2. MENGIRIM DATA RSVP KE SUPABASE ---
         document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -726,16 +688,6 @@ Kirim Ucapan
                 document.getElementById('rsvpForm').reset();
             }
         });
-
-        // // Initial Engine Load
-        // window.addEventListener('DOMContentLoaded', () => {
-        //     if(!localStorage.getItem('wedding_wishlist')) saveDB('wedding_wishlist', defaultWishlist);
-        //     if(!localStorage.getItem('wedding_comments')) saveDB('wedding_comments', defaultComments);
-        //     if(!localStorage.getItem('wedding_rsvp')) saveDB('wedding_rsvp', defaultRSVP);
-        
-        //     renderWishlist();
-        //     renderComments();
-        // });
         
         // --- KIRIM FORM UCAPAN (COMMENTS) KE SUPABASE ---
         document.getElementById('commentForm').addEventListener('submit', async (e) => {
