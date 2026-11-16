@@ -543,8 +543,8 @@ Kirim Ucapan
         
         // --- INISIALISASI SUPABASE ---
         // Ambil URL & Anon Key dari Dashboard Supabase -> Project Settings -> API
-        const SUPABASE_URL = 'https://supabase.co';
-        const SUPABASE_ANON_KEY = 'MASUKKAN_ANON_PUBLIC_KEY_ANDA_DI_SINI';
+        const SUPABASE_URL = 'https://wwkcjmdzzmxlwsrpvika.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_u851bwQm29hEwGQr3dvZwg_osyNEO-l';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         // --- LOCAL JSON DATABASE ENGINE ---
@@ -611,7 +611,6 @@ Kirim Ucapan
             const container = document.getElementById('comments-container');
             container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Memuat ucapan...</p>';
         
-            // Mengambil data dari tabel 'wedding_comments', diurutkan dari yang terbaru
             const { data: comments, error } = await supabaseClient
                 .from('wedding_comments')
                 .select('*')
@@ -619,13 +618,13 @@ Kirim Ucapan
         
             if (error) {
                 console.error('Gagal memuat ucapan:', error.message);
-                container.innerHTML = '<p class="text-xs text-red-400">Gagal memuat ucapan.</p>';
+                container.innerHTML = '<p class="text-xs text-red-400">Gagal memuat ucapan. Periksa koneksi atau konfigurasi API.</p>';
                 return;
             }
         
             container.innerHTML = '';
-            if (comments.length === 0) {
-                container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Belum ada ucapan. Jadilah yang pertama!</p>';
+            if (!comments || comments.length === 0) {
+                container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Belum ada ucapan. Jadilah yang pertama memberikan doa restu!</p>';
                 return;
             }
         
@@ -633,15 +632,27 @@ Kirim Ucapan
                 container.innerHTML += `
                     <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 text-xs">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-[#E6DCC4]">${c.name}</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded bg-[#C2B280]/10 text-[#C2B280] font-medium">${c.relation}</span>
+                            <span class="font-bold text-[#E6DCC4]">${escapeHTML(c.name)}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-[#C2B280]/10 text-[#C2B280] font-medium">${escapeHTML(c.relation)}</span>
                         </div>
-                        <p class="text-[#E6DCC4]/80 leading-relaxed">${c.text}</p>
+                        <p class="text-[#E6DCC4]/80 leading-relaxed">${escapeHTML(c.text)}</p>
                     </div>
                 `;
             });
         }
 
+        // Fungsi keamanan dasar untuk mencegah XSS saat menampilkan input tamu
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        }
+        
         // Actions
         function claimWish(id) {
             const name = prompt("Masukkan nama Anda untuk mengklaim kado ini:");
@@ -725,12 +736,46 @@ Kirim Ucapan
         //     renderComments();
         // });
         
+        // --- KIRIM FORM UCAPAN (COMMENTS) KE SUPABASE ---
+        document.getElementById('commentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerText;
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Mengirim...';
+        
+            const name = document.getElementById('commentName').value.trim();
+            const relation = document.getElementById('commentRelation').value;
+            const text = document.getElementById('commentText').value.trim();
+        
+            const { error } = await supabaseClient
+                .from('wedding_comments')
+                .insert([{ name, relation, text }]);
+        
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        
+            if (error) {
+                console.error('Gagal mengirim ucapan:', error.message);
+                alert('Maaf, gagal mengirim ucapan: ' + error.message);
+            } else {
+                document.getElementById('commentForm').reset();
+                await renderComments(); // Langsung muat ulang daftar ucapan terbaru dari Supabase
+            }
+        });
+        
+        
         // --- INITIAL ENGINE LOAD ---
         window.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('wedding_wishlist')) saveDB('wedding_wishlist', defaultWishlist);
+            if (typeof defaultWishlist !== 'undefined' && !localStorage.getItem('wedding_wishlist')) {
+                saveDB('wedding_wishlist', defaultWishlist);
+            }
+            if (typeof renderWishlist === 'function') {
+                renderWishlist();
+            }
             
-            renderWishlist();
-            renderComments(); // Otomatis mengambil data ucapan dari Supabase saat halaman dibuka
+            renderComments(); // Muat ucapan dari Supabase saat halaman dibuka
         });
     </script>
 </body>
