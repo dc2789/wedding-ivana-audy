@@ -410,29 +410,31 @@ Kirim Ucapan
         <p class="font-premium-serif text-lg font-semibold text-[#C2B280] tracking-widest">Audy & Ivanna</p>
         <p class="text-xs text-[#C2B280]/40 mt-2">© 2026 DC.orp. All Rights Reserved.</p>
     </footer>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const namaTamu = urlParams.get('to');
-
-    if (namaTamu) {
-      document.getElementById('nama-tamu').textContent = namaTamu;
-    }
-  });
-</script>
+    
+    <script src="https://jsdelivr.net"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const namaTamu = urlParams.get('to');
+    
+        if (namaTamu) {
+          document.getElementById('nama-tamu').textContent = namaTamu;
+        }
+      });
+    </script>
     
     <!-- INTERACTIVE SCRIPT & LOCAL JSON ENGINE -->
     <script>
-// Init AOS Animations
-AOS.init({
-    once: false,
-    mirror: true,
-    duration: 1500,
-    easing: 'ease-in-out',
-    offset: 100,
-    delay: 80,
-    anchorPlacement: 'top-bottom'
-});
+        // Init AOS Animations
+        AOS.init({
+            once: false,
+            mirror: true,
+            duration: 1500,
+            easing: 'ease-in-out',
+            offset: 100,
+            delay: 80,
+            anchorPlacement: 'top-bottom'
+        });
 
         // Target Event Dates (2026 Simulation)
         const datePemberkatan = new Date("Nov 22, 2026 13:00:00").getTime();
@@ -465,6 +467,7 @@ AOS.init({
                 document.getElementById("countdown-resepsi").innerText = "Acara Dimulai";
             }
         }
+        
         setInterval(updateCountdowns, 1000);
         updateCountdowns();
 
@@ -481,55 +484,54 @@ AOS.init({
         } **/
 
         function startInvitation() {
-
-    const button = document.getElementById("openInvitation");
-
-    // Mencegah tombol diklik berulang kali
-    button.disabled = true;
-
-    // Efek transisi tombol
-    button.style.opacity = "0";
-    button.style.transform = "translateY(15px)";
-
-    // Jalankan musik
-    music.play().then(() => {
-        musicToggle.classList.add("music-rotate");
-        musicIcon.className = "fas fa-music";
-    }).catch(e => {
-        console.log("Music playback requires user interaction.");
-    });
-
-    // Berikan waktu untuk animasi pembukaan
-    setTimeout(() => {
-
-        // Buka kunci scroll
-        document.body.classList.remove("invitation-locked");
-
-        // Scroll menuju konten utama
-        document.getElementById("main-content").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+            const button = document.getElementById("openInvitation");
+            
+            // Mencegah tombol diklik berulang kali
+            button.disabled = true;
+        
+            // Efek transisi tombol
+            button.style.opacity = "0";
+            button.style.transform = "translateY(15px)";
+        
+            // Jalankan musik
+            music.play().then(() => {
+                musicToggle.classList.add("music-rotate");
+                musicIcon.className = "fas fa-music";
+            }).catch(e => {
+                console.log("Music playback requires user interaction.");
+            });
+        
+            // Berikan waktu untuk animasi pembukaan
+            setTimeout(() => {
+        
+                // Buka kunci scroll
+                document.body.classList.remove("invitation-locked");
+        
+                // Scroll menuju konten utama
+                document.getElementById("main-content").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+        
+                // Refresh AOS agar animasi berjalan dengan benar
+                setTimeout(() => {
+                    AOS.refreshHard();
+                }, 800);
+        
+            }, 4000);
+                }
+        
+                musicToggle.addEventListener("click", () => {
+            if (music.paused) {
+                music.play();
+                musicIcon.className = "fas fa-music";
+                musicToggle.classList.add("music-rotate");
+            } else {
+                music.pause();
+                musicIcon.className = "fas fa-pause";
+                musicToggle.classList.remove("music-rotate");
+            }
         });
-
-        // Refresh AOS agar animasi berjalan dengan benar
-        setTimeout(() => {
-            AOS.refreshHard();
-        }, 800);
-
-    }, 4000);
-        }
-
-        musicToggle.addEventListener("click", () => {
-    if (music.paused) {
-        music.play();
-        musicIcon.className = "fas fa-music";
-        musicToggle.classList.add("music-rotate");
-    } else {
-        music.pause();
-        musicIcon.className = "fas fa-pause";
-        musicToggle.classList.remove("music-rotate");
-    }
-});
 
         // Clipboard Copy
         function copyToClipboard(id) {
@@ -538,7 +540,13 @@ AOS.init({
                 alert("Nomor rekening berhasil disalin!");
             });
         }
-
+        
+        // --- INISIALISASI SUPABASE ---
+        // Ambil URL & Anon Key dari Dashboard Supabase -> Project Settings -> API
+        const SUPABASE_URL = 'https://supabase.co';
+        const SUPABASE_ANON_KEY = 'MASUKKAN_ANON_PUBLIC_KEY_ANDA_DI_SINI';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         // --- LOCAL JSON DATABASE ENGINE ---
         // Mock Initial JSON Data Seed
         const defaultWishlist = [
@@ -549,7 +557,6 @@ AOS.init({
         ];
 
         const defaultComments = [];
-
         const defaultRSVP = [];
 
         // Database Init Helpers
@@ -582,11 +589,47 @@ AOS.init({
             });
         }
 
-        function renderComments() {
-            const comments = getDB('wedding_comments', defaultComments);
+        // function renderComments() {
+        //     const comments = getDB('wedding_comments', defaultComments);
+        //     const container = document.getElementById('comments-container');
+        //     container.innerHTML = '';
+        //     comments.slice().reverse().forEach(c => {
+        //         container.innerHTML += `
+        //             <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 text-xs">
+        //                 <div class="flex justify-between items-center mb-1">
+        //                     <span class="font-bold text-[#E6DCC4]">${c.name}</span>
+        //                     <span class="text-[10px] px-2 py-0.5 rounded bg-[#C2B280]/10 text-[#C2B280] font-medium">${c.relation}</span>
+        //                 </div>
+        //                 <p class="text-[#E6DCC4]/80 leading-relaxed">${c.text}</p>
+        //             </div>
+        //         `;
+        //     });
+        // }
+
+        // --- 1. MENGAMBIL & MERENDER UCAPAN DARI SUPABASE ---
+        async function renderComments() {
             const container = document.getElementById('comments-container');
+            container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Memuat ucapan...</p>';
+        
+            // Mengambil data dari tabel 'wedding_comments', diurutkan dari yang terbaru
+            const { data: comments, error } = await supabaseClient
+                .from('wedding_comments')
+                .select('*')
+                .order('id', { ascending: false });
+        
+            if (error) {
+                console.error('Gagal memuat ucapan:', error.message);
+                container.innerHTML = '<p class="text-xs text-red-400">Gagal memuat ucapan.</p>';
+                return;
+            }
+        
             container.innerHTML = '';
-            comments.slice().reverse().forEach(c => {
+            if (comments.length === 0) {
+                container.innerHTML = '<p class="text-xs text-[#E6DCC4]/60">Belum ada ucapan. Jadilah yang pertama!</p>';
+                return;
+            }
+        
+            comments.forEach(c => {
                 container.innerHTML += `
                     <div class="bg-[#231E16] p-3 rounded border border-[#C2B280]/10 text-xs">
                         <div class="flex justify-between items-center mb-1">
@@ -611,42 +654,84 @@ AOS.init({
 
         // Form Submit Listeners
         document.getElementById('commentForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('commentName').value;
-    const relation = document.getElementById('commentRelation').value;
-    const text = document.getElementById('commentText').value;
-
-    const comments = getDB('wedding_comments', defaultComments);
-    comments.push({name, relation, text});
+            e.preventDefault();
+            const name = document.getElementById('commentName').value;
+            const relation = document.getElementById('commentRelation').value;
+            const text = document.getElementById('commentText').value;
+        
+            const comments = getDB('wedding_comments', defaultComments);
+            comments.push({name, relation, text});
             saveDB('wedding_comments', comments);
-
+        
             renderComments();
             document.getElementById('commentForm').reset();
         });
 
-        document.getElementById('rsvpForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('rsvpName').value;
-    const count = document.getElementById('rsvpCount').value;
-    const status = document.querySelector('input[name="rsvpStatus"]:checked').value;
+        // document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     const name = document.getElementById('rsvpName').value;
+        //     const count = document.getElementById('rsvpCount').value;
+        //     const status = document.querySelector('input[name="rsvpStatus"]:checked').value;
+            
+        //     const rsvpList = getDB('wedding_rsvp', defaultRSVP);
+        //     rsvpList.push({name, count, status, timestamp: new Date().toISOString()});
+        //     saveDB('wedding_rsvp', rsvpList);
+    
+        //     alert(`Terima kasih ${name}, data reservasi Anda (${status}) telah berhasil kami simpan.`);
+        //     document.getElementById('rsvpForm').reset();
+        // });
 
-    const rsvpList = getDB('wedding_rsvp', defaultRSVP);
-    rsvpList.push({name, count, status, timestamp: new Date().toISOString()});
-            saveDB('wedding_rsvp', rsvpList);
-
-            alert(`Terima kasih ${name}, data reservasi Anda (${status}) telah berhasil kami simpan.`);
-            document.getElementById('rsvpForm').reset();
+        // --- 2. MENGIRIM DATA RSVP KE SUPABASE ---
+        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn ? submitBtn.innerText : 'Kirim';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Menyimpan...';
+            }
+        
+            const name = document.getElementById('rsvpName').value;
+            const count = parseInt(document.getElementById('rsvpCount').value, 10);
+            const status = document.querySelector('input[name="rsvpStatus"]:checked').value;
+        
+            // Simpan ke tabel 'wedding_rsvp' di Supabase
+            const { error } = await supabaseClient
+                .from('wedding_rsvp')
+                .insert([{ name, count, status }]);
+        
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+            }
+        
+            if (error) {
+                console.error('Error RSVP:', error.message);
+                alert('Maaf, terjadi kesalahan saat menyimpan reservasi: ' + error.message);
+            } else {
+                alert(`Terima kasih ${name}, data reservasi Anda (${status}) telah berhasil kami simpan.`);
+                document.getElementById('rsvpForm').reset();
+            }
         });
 
-        // Initial Engine Load
+        // // Initial Engine Load
+        // window.addEventListener('DOMContentLoaded', () => {
+        //     if(!localStorage.getItem('wedding_wishlist')) saveDB('wedding_wishlist', defaultWishlist);
+        //     if(!localStorage.getItem('wedding_comments')) saveDB('wedding_comments', defaultComments);
+        //     if(!localStorage.getItem('wedding_rsvp')) saveDB('wedding_rsvp', defaultRSVP);
+        
+        //     renderWishlist();
+        //     renderComments();
+        // });
+        
+        // --- INITIAL ENGINE LOAD ---
         window.addEventListener('DOMContentLoaded', () => {
-    if(!localStorage.getItem('wedding_wishlist')) saveDB('wedding_wishlist', defaultWishlist);
-    if(!localStorage.getItem('wedding_comments')) saveDB('wedding_comments', defaultComments);
-    if(!localStorage.getItem('wedding_rsvp')) saveDB('wedding_rsvp', defaultRSVP);
-
-    renderWishlist();
-    renderComments();
-});
+            if (!localStorage.getItem('wedding_wishlist')) saveDB('wedding_wishlist', defaultWishlist);
+            
+            renderWishlist();
+            renderComments(); // Otomatis mengambil data ucapan dari Supabase saat halaman dibuka
+        });
     </script>
 </body>
 </html>
